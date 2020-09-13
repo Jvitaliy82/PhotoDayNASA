@@ -1,32 +1,19 @@
 package com.jdeveloperapps.photodaynasa.ui.main
 
-import androidx.lifecycle.ViewModelProviders
-import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import coil.api.load
 import com.jdeveloperapps.photodaynasa.R
 import kotlinx.android.synthetic.main.main_fragment.*
 
-class MainFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = MainFragment()
-    }
+class MainFragment : Fragment(R.layout.main_fragment) {
 
     private lateinit var viewModel: MainViewModel
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+    override fun onResume() {
+        super.onResume()
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         val observer = Observer<PictureOfTheDayData> { renderData(it) }
         viewModel.getData().observe(viewLifecycleOwner, observer)
     }
@@ -39,8 +26,8 @@ class MainFragment : Fragment() {
                 if (url.isNullOrEmpty()) {
                     //showDialog("Ошибка", "Сообщение с сервера пустое")
                 } else {
-                    image_view.load(url)
                     message.text = serverResponseData.explanation
+                    image_view.load(url)
                 }
             }
             is PictureOfTheDayData.Loading -> {

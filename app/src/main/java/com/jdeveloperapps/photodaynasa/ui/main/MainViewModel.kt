@@ -3,14 +3,10 @@ package com.jdeveloperapps.photodaynasa.ui.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.gson.GsonBuilder
+import com.jdeveloperapps.photodaynasa.data.api.PODRetrofitImpl
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Query
 
 class MainViewModel(
         private val liveDataForViewToObserve: MutableLiveData<PictureOfTheDayData> = MutableLiveData(),
@@ -23,7 +19,7 @@ class MainViewModel(
 
     private fun sendServerRequest() {
         liveDataForViewToObserve.value = PictureOfTheDayData.Loading(null)
-        retrofitImpl.getRetrofitImpl().getPictureOfTheDay("DEMO_KEY").enqueue(object :
+        retrofitImpl.getRetrofitImpl().getPictureOfTheDay("2020-09-09","DEMO_KEY").enqueue(object :
                 Callback<PODServerResponseData> {
 
             override fun onResponse(
@@ -63,25 +59,6 @@ sealed class PictureOfTheDayData {
     data class Loading(val progress: Int?) : PictureOfTheDayData()
 }
 
-interface PictureOfTheDayAPI {
-    @GET("planetary/apod")
-    fun getPictureOfTheDay(@Query("api_key") apiKey: String): Call<PODServerResponseData>
-}
-
-class PODRetrofitImpl {
-
-    fun getRetrofitImpl(): PictureOfTheDayAPI {
-        val podRetrofit = Retrofit.Builder()
-                .baseUrl("https://api.nasa.gov/")
-                .addConverterFactory(
-                        GsonConverterFactory.create(
-                                GsonBuilder().setLenient().create()
-                        )
-                )
-                .build()
-        return podRetrofit.create(PictureOfTheDayAPI::class.java)
-    }
-}
 
 
 
