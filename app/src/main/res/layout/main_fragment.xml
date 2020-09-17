@@ -10,10 +10,22 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/progressBar"
+            android:layout_marginTop="-7dp"
+            android:layout_marginBottom="-7dp"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:indeterminate="true"
+            android:indeterminateTintMode="src_atop"
+            android:indeterminateTint="@color/colorAccent"/>
+
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/image_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="300dp"
             android:layout_gravity="center" />
 
         <TextView
